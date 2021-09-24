@@ -56,7 +56,7 @@ contract Donacion{
 		//El modifier se asegura de que tenemos proyectos reales, que han sido aceptados por alguien que ha subido anteriormente
 		
 		//Asegurarse de que no son vacíos
-		require(bytes(_proyHash).length == 256);
+		//require(bytes(_proyHash).length == 256);
 		require(bytes(_descripcion).length > 0);
 		require(msg.sender != address(0x0));
 
@@ -71,28 +71,15 @@ contract Donacion{
 
 	}
 
-	//Retorna el último proyecto que ha sido subido
-	function getUltimoProyecto() public returns (uint, string memory hs, string memory nm, string memory org, string memory des, address, uint, uint){
-		Proyecto memory _proyecto = proyectos[proyectoID];
-			hs = _proyecto.hash;
-			nm = _proyecto.nombre;
-			org = _proyecto.organizacion;
-			des = _proyecto.descripcion;
-			return(_proyecto.id, hs ,nm, org, des,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
-	}
-
 	//Retorna el proyecto correspondiente a un id concreto que recibe como parametro
-	function getProyecto(uint _id) public returns (uint, string memory hs, string memory nm, string memory org, string memory des, address, uint, uint){
+	function getProyecto(uint _id) public view returns (uint id, string memory hs, string memory nm, string memory org, string memory des, address add, uint donRec, uint donReq){
 		Proyecto memory _proyecto = proyectos[_id];
-			hs = _proyecto.hash;
-			nm = _proyecto.nombre;
-			org = _proyecto.organizacion;
-			des = _proyecto.descripcion;
-			return(_proyecto.id, hs ,nm, org, des,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
+			return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
 	}
 
+	
 	//DONAR A UN PROYECTO
-	function donar(uint _id) public payable{
+	function donar(uint _id, uint cantidad) public payable{
 
 		require(_id > 0 && _id <= proyectoID);
 
@@ -106,10 +93,10 @@ contract Donacion{
 		address payable _autor = _proyecto.autor;
 
 		//Donar
-		address(_autor).transfer(msg.value); //value nundik hartzen do??
+		address(_autor).transfer(cantidad);
 
 		//Aumentar el valor de la donación que ha recibido ese proyecto
-		_proyecto.donacionRecibida = _proyecto.donacionRecibida + msg.value;
+		_proyecto.donacionRecibida = _proyecto.donacionRecibida + cantidad;
 
 		//Volver a poner el proyecto en el mapping
 		proyectos[_id] = _proyecto;
