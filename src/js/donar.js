@@ -11,7 +11,7 @@ async function escribirDatos(){
 		proyectos.push(web3.methods.getProyecto(i))
 	}
 
-	datosProyectos = "";
+	let datosProyectos = "";
 	for (proyecto in proyectos){
 		datos = 
 	`
