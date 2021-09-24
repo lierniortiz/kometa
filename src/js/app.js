@@ -1,6 +1,4 @@
-//Cuando se carga la página
-window.addEventListener("load", function () {});
-
+//conexión a web3
 async function conexionWeb3() {
   //PROTOCOLO: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md
   if (window.ethereum) {
@@ -26,43 +24,23 @@ async function conexionWeb3() {
   web3 = new Web3(window.ethereum);
 }
 
-//Cargar el contrato
-/*function cargarContrato() {
-  var DonacionJSON = $.getJSON(
-    "../../build/constracts/Donacion.json",
-    function (data) {
-      console.log(data);
-      return data;
-    }
-  );
 
-  return new web3.eth.Contract(DonacionJSON);
-}*/
 
 //Devuelve la cuenta con la que está operando metamask
-function getCuenta() {
+async function getCuenta() {
   window.ethereum.enable();
-  let acc = web3.eth.getAccounts().then(function (acc) {
-    accounts = acc[0];
-    return accounts;
-  });
-  return acc;
+  let acc = await web3.eth.getAccounts();
+  return acc[0];
 }
 
-//Cargar el archivo json del contrato
-function loadJSON(callback) {
-  const file = "Donacion.json";
-  var xobj = new XMLHttpRequest();
-  xobj.overrideMimeType("application/json");
-  xobj.open("GET", file, true);
-  xobj.onreadystatechange = function () {
-    if (xobj.readyState == 4 && xobj.status == "200") {
-      // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-      callback(xobj.responseText);
-    }
-  };
-  xobj.send(null);
+//Cargar el Json
+async function loadJSON() {
+  const file = "http://localhost:3000/Donacion.json";
+  const promise = await fetch(file);
+  const json = await promise.json();
+  return json;
 }
+
 
 //Retorna el hash-256 de un mensaje que se le pasa como parametro
 async function digestMessage(message) {
@@ -74,28 +52,28 @@ async function digestMessage(message) {
 //const digestBuffer = await digestMessage(text);
 //console.log(digestBuffer.byteLength);
 
-//Recoge datos del formulario de inscripcion de proyectos y los sube a la blockchain
-async function recogerDatos() {
-  conexionWeb3();
-  //--------------------init()------------------------------//
-  loadJSON(function (data) {
-    var contract = JSON.parse(data);
-    //console.log(contract);
+
+async function init(){
+    const contract = await loadJSON();
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x9Ad10d8aDa15A6651d05D86a87C34BeB9ad6B740"
+      "0x2dD944eBECaA6580b45FEc3B576D40a3973b57C0"
     );
-    //--------------------------------------------------------//
+    return contractInstance;
+}
 
-    console.log(contractInstance);
+//Recoge datos del formulario de inscripcion de proyectos y los sube a la blockchain
+async function recogerDatos() {
+    conexionWeb3();
+    const contractInstance = await init();
 
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
     const contacto = document.getElementById("contacto").value;
     const donReq = document.getElementById("donReq").value;
     const descripcion = document.getElementById("descripcion").value;
-    //const img = document.getElementById("imagen").value;
+    const img = document.getElementById("imagen");
     const info = [
       nombreProyecto,
       nombreOrganizacion,
@@ -104,23 +82,15 @@ async function recogerDatos() {
       descripcion,
     ];
 
-    const ac = getCuenta();
-    const cuenta = () => {
-      ac.then((a) => {
-        return a;
-      });
-    };
-    document.getElementById("cuenta").innerHTML = "Cuenta: " + cuenta();
-
-    //HAY QUE ARREGLAR LA ASINCRONÍA DE ESTO PARA METERLO EN EL SEND(from: ... ), y para que aparezca bien la cuenta
+    const ac = await getCuenta();
+    
+    document.getElementById("cuenta").innerHTML = "Cuenta: " + ac;
 
     contractInstance.methods.subirProyecto("5875aa6d0a4dbfca428c0c848e0a7c4584b67dd24554cd604f64e4275b77c2f0", nombreProyecto, nombreOrganizacion, descripcion, donReq).send({
-        from: /*cuenta()*/ "0x56b32c3557eFB8A836Aeeac0d6F4f778B111c48B",
+        from: ac,
       });
     //altera el estado del contrato, si no alterara .call()
-
-    //escribirDatos(contractInstance);
-  });
+  
 }
 
 //Escribe en la sección de proyectos el último proyecto que se ha sido subido a la blockchain.
@@ -145,9 +115,7 @@ async function recogerDatos() {
 }*/
 
 //Funcion que permite donar
-function donar(_id) {
-  //Hay que identificar cada boton con un id??
-}
+
 
 //Función que sube una imagen dada a ipfs y nos retorna el hash
 /*async function loadIPFS(img) {
