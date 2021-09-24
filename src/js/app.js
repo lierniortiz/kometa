@@ -74,13 +74,6 @@ async function recogerDatos() {
     const donReq = document.getElementById("donReq").value;
     const descripcion = document.getElementById("descripcion").value;
     const img = document.getElementById("imagen");
-    const info = [
-      nombreProyecto,
-      nombreOrganizacion,
-      contacto,
-      donReq,
-      descripcion,
-    ];
 
     const ac = await getCuenta();
     
@@ -93,34 +86,12 @@ async function recogerDatos() {
   
 }
 
-//Escribe en la sección de proyectos el último proyecto que se ha sido subido a la blockchain.
-/*function escribirDatos(contrato) {
-  proyecto = contrato.methods.getUltimoProyecto();
-  //COMO ESCRIBO LA TUPLA EN DONAR.HTML???
-  id = proyecto[0];
-  hs = proyecto[1];
-  nm = proyecto[2];
-  org = proyecto[3];
-  des = proyecto[4];
-  au = proyecto[5];
-  dRec = proyecto[6];
-  dReq = proyecto[7];
-
-  var newDivNombre = document.createElement("div");
-
-  newDivNombre.appendChild(document.createTextNode(nm));
-  console.log(newDivNombre);
-
-  document.getElementById("donar").appendChild(nm);
-}*/
-
-//Funcion que permite donar
 
 
 //Función que sube una imagen dada a ipfs y nos retorna el hash
 /*async function loadIPFS(img) {
   const node = await IPFS.create();
-  const results = node.addAll([img,nm,...]); //podemos subir más que solo la imagen, podemos subir todo y hacer un hash(subir hash a la bch)
+  const results = node.addAll(img); //podemos subir más que solo la imagen, podemos subir todo y hacer un hash(subir hash a la bch)
   for await (const { cid } of results) {
     return cid.toString();
   }
