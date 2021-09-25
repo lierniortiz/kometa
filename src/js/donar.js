@@ -6,16 +6,16 @@ window.addEventListener("load", function () {
 async function escribirDatos(){
 	const contractInstance = await init();
 	let proyectos = [];
-	let cantidadProyectos = contractInstance.methods.proyectoID;
-	//console.log(cantidadProyectos);
+	let cantidadProyectos = await contractInstance.methods.proyectoID().call();
+	console.log(cantidadProyectos);
 
-	for (i =1; i <= 3; i++){
-		proyectos.push(contractInstance.methods.getProyecto(i))
+	for (i = 1; i <= cantidadProyectos; i++){
+		proyectos.push(await contractInstance.methods.getProyecto(i).call())
 	}
 	console.log(proyectos[0]);
 
 	let datosProyectos = "";
-	for (proyecto in proyectos){
+	for (proyecto of proyectos){
 		datos = 
 	`
 <div id="donar" class="donar">
@@ -114,6 +114,6 @@ async function getCuenta() {
 async function donar(_id) {
     const contractInstance = await init();
     let ac = await getCuenta();
-	let cantidad = document.getElementById("donacion");
-	//contractInstance.methods.donar(_id,cantidad).send(from:ac);
+	let cantidad = document.getElementById("donacion").value;
+	await contractInstance.methods.donar(_id,cantidad).send({from:ac});
 }
