@@ -58,7 +58,7 @@ async function recogerDatos() {
     conexionWeb3();
     const contractInstance = await init();
 
-    //console.log(contractInstance);
+    console.log(contractInstance);
 
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
@@ -71,7 +71,7 @@ async function recogerDatos() {
     
     document.getElementById("cuenta").innerHTML = "Cuenta: " + ac;
 
-    contractInstance.methods.subirProyecto("5875aa6d0a4dbfca428c0c848e0a7c4584b67dd24554cd604f64e4275b77c2f0", nombreProyecto, nombreOrganizacion, descripcion, donReq).send({
+    await contractInstance.methods.subirProyecto("5875aa6d0a4dbfca428c0c848e0a7c4584b67dd24554cd604f64e4275b77c2f0", nombreProyecto, nombreOrganizacion, descripcion, donReq).send({
         from: ac,
       });
     //altera el estado del contrato, si no alterara .call()
