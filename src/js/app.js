@@ -24,6 +24,8 @@ async function conexionWeb3() {
   web3 = new Web3(window.ethereum);
 }
 
+window.conexionWeb3 = conexionWeb3;
+
 
 
 //Devuelve la cuenta con la que está operando metamask
@@ -37,28 +39,16 @@ async function getCuenta() {
 async function loadJSON() {
   const file = "http://localhost:3000/Donacion.json";
   const promise = await fetch(file);
-  const json = await promise.json();
-  return json;
+  return promise.json();
 }
 
-
-//Retorna el hash-256 de un mensaje que se le pasa como parametro
-async function digestMessage(message) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return hash;
-}
-//const digestBuffer = await digestMessage(text);
-//console.log(digestBuffer.byteLength);
-
-
+//Instanciar el smart contract
 async function init(){
     const contract = await loadJSON();
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x2dD944eBECaA6580b45FEc3B576D40a3973b57C0"
+      "0xdc4E7eC42a0a19BEC1838183Ae50832C876F9b7E"
     );
     return contractInstance;
 }
@@ -67,6 +57,8 @@ async function init(){
 async function recogerDatos() {
     conexionWeb3();
     const contractInstance = await init();
+
+    //console.log(contractInstance);
 
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
@@ -85,6 +77,17 @@ async function recogerDatos() {
     //altera el estado del contrato, si no alterara .call()
   
 }
+
+
+//Retorna el hash-256 de un mensaje que se le pasa como parametro
+async function digestMessage(message) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return hash;
+}
+//const digestBuffer = await digestMessage(text);
+//console.log(digestBuffer.byteLength);
 
 
 
