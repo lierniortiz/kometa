@@ -4,12 +4,15 @@ window.addEventListener("load", function () {
 });
 
 async function escribirDatos(){
+	const contractInstance = await init();
 	let proyectos = [];
-	let cantidadProyectos = web3.methods.proyectoID;
+	let cantidadProyectos = contractInstance.methods.proyectoID;
+	//console.log(cantidadProyectos);
 
-	for (i =1; i <= cantidadProyectos; i++){
-		proyectos.push(web3.methods.getProyecto(i))
+	for (i =1; i <= 3; i++){
+		proyectos.push(contractInstance.methods.getProyecto(i))
 	}
+	console.log(proyectos[0]);
 
 	let datosProyectos = "";
 	for (proyecto in proyectos){
@@ -85,8 +88,7 @@ async function escribirDatos(){
 async function loadJSON() {
   const file = "http://localhost:3000/Donacion.json";
   const promise = await fetch(file);
-  const json = await promise.json();
-  return json;
+  return promise.json();
 }
 
 //Instancia del contrato
@@ -95,7 +97,7 @@ async function init(){
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x2dD944eBECaA6580b45FEc3B576D40a3973b57C0"
+      "0xdc4E7eC42a0a19BEC1838183Ae50832C876F9b7E"
     );
     return contractInstance;
 }
@@ -111,7 +113,7 @@ async function getCuenta() {
 //Función que permite donar
 async function donar(_id) {
     const contractInstance = await init();
-    ac = await getCuenta();
+    let ac = await getCuenta();
 	let cantidad = document.getElementById("donacion");
-	contractInstance.methods.donar(_id,cantidad).send(from:ac);
+	//contractInstance.methods.donar(_id,cantidad).send(from:ac);
 }
