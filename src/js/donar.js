@@ -14,16 +14,17 @@ async function escribirDatos(){
 
 	let datosProyectos = "";
 	for (proyecto of proyectos){
+    if (proyecto.donReq > proyecto.donRec){
 		datos = 
 	`
 <div id="donar" class="donar">
   <div class="titulo" id="nombreProyecto">${proyecto.nm}</div>
   <div class="row display_boxflex">
     <div class="org">
-      <div class="box-text">${proyecto.org}</div>
+      <div class="box-text">Organización: ${proyecto.org}</div>
     </div>
     <div class="orgR">
-      <div class="box-text">${proyecto.cont}</div>
+      <div class="box-text">Contacto: ${proyecto.cont}</div>
     </div>
   </div>
   <div class="row display_boxflex">
@@ -77,7 +78,9 @@ async function escribirDatos(){
 </div>
 </div>
 	`;
+
 	datosProyectos = datos + datosProyectos;
+  }
 	}
 
 	let container = document.querySelector("#proyectos_container");
