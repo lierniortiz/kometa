@@ -92,8 +92,8 @@ async function donar(_id) {
   const contractInstance = await init();
   let donante = await getCuenta();
   let proyecto = await contractInstance.methods.getProyecto(_id).call();
-  let id = "donacion" + proyecto.id;
-  let cantidad = document.getElementById(id).value;
+  let idHtml = "donacion" + proyecto.id;
+  let cantidad = document.getElementById(idHtml).value;
   await contractInstance.methods
     .donar(_id)
     .send({ from: donante, value: web3.utils.toWei(cantidad, "ether") });
