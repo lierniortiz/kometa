@@ -96,7 +96,7 @@ contract Donacion{
 		proyectos[_id] = _proyecto;
 
 		//Emitir evento cuando se dona
-		//emit proyectoDonado(_id, _proyecto.hash,_proyecto.nombre,_proyecto.organizacion, _proyecto.descripcion, _autor, _proyecto.donacionRecibida, _proyecto.donacionRequerida);
+		emit proyectoDonado(_id, _proyecto.hash,_proyecto.nombre,_proyecto.organizacion, _proyecto.contacto, _proyecto.descripcion, _autor, _proyecto.donacionRecibida, _proyecto.donacionRequerida);
 	}
 
 }
