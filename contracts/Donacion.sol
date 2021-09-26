@@ -42,16 +42,7 @@ contract Donacion{
 		uint donacionRequerida
 	);
 
-	//SUBIR UN PROYECTO NUEVO
-	/**modifier proyectoAceptado(uint _id) {
-		if (proyectoId < 100){
-			_;
-		} else {
-			//??aceptado = true; //como hacer que alguien acepte, y como sabemos que ese alguien ya ha subido si no
-			//se puede iterar en el mapping? se puede pedir al que acepte que meta el id del proyecto que subió
-		}
-	}***/
-
+	
 	function subirProyecto (string memory _proyHash, string memory _nombre, string memory _organizacion, string memory _descripcion, uint _donacionRequerida) /**ProyectoAceptado()**/ public {
 		//El modifier se asegura de que tenemos proyectos reales, que han sido aceptados por alguien que ha subido anteriormente
 		
@@ -77,9 +68,19 @@ contract Donacion{
 			return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
 	}
 
+	/*//Retorna el proyecto correspondiente a un id concreto que recibe como parametro
+	function getProyectoSinAcabar(uint _id) public view returns (uint id, string memory hs, string memory nm, string memory org, string memory des, address add, uint donRec, uint donReq){
+		Proyecto memory _proyecto = proyectos[_id];
+		if (_proyecto.donacionRecibida >= _proyecto.donacionRequerida){
+			break;
+		}else{
+		return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
+	    }
+	}
+	*/
 	
 	//DONAR A UN PROYECTO
-	function donar(uint _id, uint cantidad) public payable{
+	function donar(uint _id) public payable{
 
 		require(_id > 0 && _id <= proyectoID);
 
@@ -93,16 +94,16 @@ contract Donacion{
 		address payable _autor = _proyecto.autor;
 
 		//Donar
-		address(_autor).transfer(cantidad);
+		address(_autor).transfer(msg.value);
 
 		//Aumentar el valor de la donación que ha recibido ese proyecto
-		_proyecto.donacionRecibida = _proyecto.donacionRecibida + cantidad;
+		_proyecto.donacionRecibida = _proyecto.donacionRecibida + msg.value;
 
 		//Volver a poner el proyecto en el mapping
 		proyectos[_id] = _proyecto;
 
 		//Emitir evento cuando se dona
-		emit proyectoDonado(_id, _proyecto.hash,_proyecto.nombre,_proyecto.organizacion, _proyecto.descripcion, _autor, _proyecto.donacionRecibida, _proyecto.donacionRequerida);
+		//emit proyectoDonado(_id, _proyecto.hash,_proyecto.nombre,_proyecto.organizacion, _proyecto.descripcion, _autor, _proyecto.donacionRecibida, _proyecto.donacionRequerida);
 	}
 
 }
