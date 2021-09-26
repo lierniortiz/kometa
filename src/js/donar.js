@@ -15,6 +15,7 @@ async function escribirDatos(){
 	let datosProyectos = "";
 	for (proyecto of proyectos){
     if (proyecto.donReq > proyecto.donRec){
+      id = "donacion" + proyecto.id;
 		datos = 
 	`
 <div id="donar" class="donar">
@@ -48,7 +49,7 @@ async function escribirDatos(){
                 class="contactus"
                 placeholder="Cantidad a donar (ETH)"
                 type="number"
-                id="donacion"
+                id=${id}
                 required
                 />
               </div>
@@ -81,6 +82,7 @@ async function escribirDatos(){
 
 	datosProyectos = datos + datosProyectos;
   }
+
 	}
 
 	let container = document.querySelector("#proyectos_container");
@@ -92,8 +94,15 @@ async function escribirDatos(){
 async function donar(_id) {
   const contractInstance = await init();
   let donante = await getCuenta();
-	let cantidad = document.getElementById("donacion").value;
-  let autor = await contractInstance.methods.getProyecto(_id).autor;
-  console.log(await contractInstance.methods.getProyecto(_id).call());
+  let proyecto = await contractInstance.methods.getProyecto(_id).call();
+  let id = "donacion" + proyecto.id;
+	let cantidad = document.getElementById(id).value;
+  console.log("donacionRecibida", proyecto.donRec);
+  console.log("donacionRequerida", proyecto.donReq);
 	await contractInstance.methods.donar(_id).send({from: donante, value: web3.utils.toWei(cantidad,"ether")});
+/*
+  const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
+  console.log(eventos);
+  const numeroBloque = eventos[0].blockNumber;
+  alert("Tu proyecto ha sido subido al bloque número: " + numeroBloque);*/
 }
