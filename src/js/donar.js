@@ -104,7 +104,7 @@ async function donar(_id) {
   const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
   console.log(eventos);  
   const tx = eventos[0].transactionHash;
-  alert("Hash de tu transacción: ", tx);
+  alert("Hash de tu transacción: " + tx);
 
 
 }
