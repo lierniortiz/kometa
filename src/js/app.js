@@ -6,7 +6,7 @@ async function conexionWeb3() {
     try {
       // Solicitar acceso a la cuenta
       window.ethereum.request({ method: "eth_requestAccounts" });
-      alert("Conectado a Web3");
+      //alert("Conectado a Web3");
     } catch (error) {
       // Acceso denegado...
       alert("Necesitas un proveedor de web3");
@@ -52,7 +52,7 @@ async function init(){
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x0C7364CE8a3D6aA2c7401EC0E1b0B37a79928618"
+      "0x4966654F7ebBee98890590406e5c36f5FbC47ac3"
     );
     return contractInstance;
 }
@@ -63,7 +63,7 @@ window.init = init;
 async function recogerDatos() {
     conexionWeb3();
     const contractInstance = await init();
-    console.log(contractInstance);
+    //console.log(contractInstance);
 
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
@@ -77,13 +77,11 @@ async function recogerDatos() {
 
     const donReqWei = web3.utils.toWei(donReq,"ether");
 
-    await contractInstance.methods.subirProyecto("brv", nombreProyecto, nombreOrganizacion, descripcion, donReqWei).send({from: ac,});
+    await contractInstance.methods.subirProyecto("brv", nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
     
-    const evento = await contractInstance.events.proyectoSubido();
-
-    //COMO GESTIONAR ESTOOO????
-    console.log(evento);
-      
+    const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
+    const numeroBloque = eventos[0].blockNumber;
+    alert("Tu proyecto ha sido subido al bloque número: " + numeroBloque);
 }
 
 /*
