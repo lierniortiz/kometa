@@ -94,14 +94,17 @@ async function donar(_id) {
   let proyecto = await contractInstance.methods.getProyecto(_id).call();
   let id = "donacion" + proyecto.id;
   let cantidad = document.getElementById(id).value;
-  console.log("donacionRecibida", proyecto.donRec);
-  console.log("donacionRequerida", proyecto.donReq);
   await contractInstance.methods
     .donar(_id)
     .send({ from: donante, value: web3.utils.toWei(cantidad, "ether") });
-  /*
+
+  console.log("donacionRecibida", proyecto.donRec);
+  console.log("donacionRequerida", proyecto.donReq);
+  
   const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
-  console.log(eventos);
-  const numeroBloque = eventos[0].blockNumber;
-  alert("Tu proyecto ha sido subido al bloque número: " + numeroBloque);*/
+  console.log(eventos);  
+  const tx = eventos[0].transactionHash;
+  alert("Hash de tu transacción: ", tx);
+
+
 }
