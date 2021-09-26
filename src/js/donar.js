@@ -14,7 +14,7 @@ async function escribirDatos() {
 
   let datosProyectos = "";
   for (proyecto of proyectos) {
-    if (proyecto.donReq > proyecto.donRec) {
+    if (proyecto.donReq - proyecto.donRec > 0) {
       id = "donacion" + proyecto.id;
       datos = `
         <div id="donar" class="donar">
@@ -97,12 +97,8 @@ async function donar(_id) {
   await contractInstance.methods
     .donar(_id)
     .send({ from: donante, value: web3.utils.toWei(cantidad, "ether") });
-
-  console.log("donacionRecibida", proyecto.donRec);
-  console.log("donacionRequerida", proyecto.donReq);
   
   const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
-  console.log(eventos);  
   const tx = eventos[0].transactionHash;
   alert("Hash de tu transacción: " + tx);
 
