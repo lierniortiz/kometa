@@ -81,7 +81,7 @@ async function recogerDatos() {
     
     const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
     const numeroBloque = eventos[0].blockNumber;
-    alert("Tu proyecto ha sido subido al bloque número: " + numeroBloque);
+    alert("Tu proyecto ha sido subido al bloque número " + numeroBloque);
 }
 
 /*
