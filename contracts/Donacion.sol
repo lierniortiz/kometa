@@ -14,6 +14,7 @@ contract Donacion{
 		string hash; //(hash de IPSF)
 		string nombre;
 		string organizacion;
+		string contacto;
 		string descripcion;
 		address payable autor; //Para enviar donaciones al dueño del proyecto
 		uint donacionRecibida; //Donacion que ha recibido
@@ -25,6 +26,7 @@ contract Donacion{
 		string hash,
 		string nombre,
 		string organizacion,
+		string contacto,
 		string descripcion,
 		address payable autor,
 		uint donacionRecibida,
@@ -36,6 +38,7 @@ contract Donacion{
 		string hash,
 		string nombre,
 		string organizacion,
+		string contacto,
 		string descripcion,
 		address payable autor,
 		uint donacionRecibida,
@@ -43,7 +46,7 @@ contract Donacion{
 	);
 
 	
-	function subirProyecto (string memory _proyHash, string memory _nombre, string memory _organizacion, string memory _descripcion, uint _donacionRequerida) /**ProyectoAceptado()**/ public {
+	function subirProyecto (string memory _proyHash, string memory _nombre, string memory _organizacion, string memory _contacto, string memory _descripcion, uint _donacionRequerida) /**ProyectoAceptado()**/ public {
 		//El modifier se asegura de que tenemos proyectos reales, que han sido aceptados por alguien que ha subido anteriormente
 		
 		//Asegurarse de que no son vacíos
@@ -55,30 +58,20 @@ contract Donacion{
 		proyectoID ++;
 
 		//Añadir proyectos al contrato
-		proyectos[proyectoID] = Proyecto(proyectoID, _proyHash, _nombre, _organizacion, _descripcion, msg.sender, 0, _donacionRequerida);
+		proyectos[proyectoID] = Proyecto(proyectoID, _proyHash, _nombre, _organizacion, _contacto, _descripcion, msg.sender, 0, _donacionRequerida);
 
 		//Emitir evento al subirse un proyecto nuevo
-		emit proyectoSubido(proyectoID, _proyHash, _nombre, _organizacion, _descripcion, msg.sender, 0, _donacionRequerida);
+		emit proyectoSubido(proyectoID, _proyHash, _nombre, _organizacion, _contacto, _descripcion, msg.sender, 0, _donacionRequerida);
 
 	}
 
 	//Retorna el proyecto correspondiente a un id concreto que recibe como parametro
-	function getProyecto(uint _id) public view returns (uint id, string memory hs, string memory nm, string memory org, string memory des, address add, uint donRec, uint donReq){
+	function getProyecto(uint _id) public view returns (uint id, string memory hs, string memory nm, string memory org, string memory cont, string memory des, address add, uint donRec, uint donReq){
 		Proyecto memory _proyecto = proyectos[_id];
-			return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
+			return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.contacto, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
 	}
 
-	/*//Retorna el proyecto correspondiente a un id concreto que recibe como parametro
-	function getProyectoSinAcabar(uint _id) public view returns (uint id, string memory hs, string memory nm, string memory org, string memory des, address add, uint donRec, uint donReq){
-		Proyecto memory _proyecto = proyectos[_id];
-		if (_proyecto.donacionRecibida >= _proyecto.donacionRequerida){
-			break;
-		}else{
-		return(_proyecto.id, _proyecto.hash, _proyecto.nombre, _proyecto.organizacion, _proyecto.descripcion,_proyecto.autor,_proyecto.donacionRecibida,_proyecto.donacionRequerida);
-	    }
-	}
-	*/
-	
+		
 	//DONAR A UN PROYECTO
 	function donar(uint _id) public payable{
 
