@@ -5,7 +5,8 @@ window.addEventListener("load", function () {
 
 async function escribirDatos() {
   const ac = await getCuenta();
-  document.getElementById("cuenta").innerHTML = "Cuenta: " + ac;
+  if (ac != undefined)
+    document.getElementById("cuenta").innerHTML = "Cuenta: " + ac;
 
   const contractInstance = await init();
   let proyectos = [];
