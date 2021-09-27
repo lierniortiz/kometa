@@ -6,7 +6,7 @@
 ```
 npm install g-truffle
 ```
-3. Ganche. https://www.trufflesuite.com/ganache
+3. Ganache. https://www.trufflesuite.com/ganache
 4. Metamask. https://metamask.io/download.html
 5. Node Package Manager (es necesaria la carpeta node_modules)
 ```
