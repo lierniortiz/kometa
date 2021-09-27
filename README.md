@@ -13,7 +13,7 @@ npm install g-truffle
 npm install
 ```
 
-## Despelgar el contrato
+## Desplegar el contrato
 Abrir Ganache (con quickstart es suficiente) y desplegar el contrato:
 ```
 truffle migrate
