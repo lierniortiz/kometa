@@ -69,33 +69,37 @@ async function recogerDatos() {
     const contacto = document.getElementById("contacto").value;
     const donReq = document.getElementById("donReq").value;
     const descripcion = document.getElementById("descripcion").value;
-    const img = document.getElementById("imagen");
+    const img = document.getElementById("imagen").files[0];
     
     const ac = await getCuenta();
 
-    //const hs = await loadIPFS(img);
+    const base64 = await toBase64(img);
+    const imgResponse = await uploadImage(base64);
+    const hs = imgResponse.cid;
+    console.log(hs);
 
     const donReqWei = web3.utils.toWei(donReq,"ether");
 
-    await contractInstance.methods.subirProyecto("hgv", nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
-    
+    await contractInstance.methods.subirProyecto(hs, nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
+
     const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
     const numeroBloque = eventos[0].blockNumber;
     alert("Tu proyecto ha sido subido al bloque número " + numeroBloque);
 }
 
-/*
-//Retorna el hash-256 de un mensaje que se le pasa como parametro
-async function digestMessage(message) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return hash;
-}
-//const digestBuffer = await digestMessage(text);
-//console.log(digestBuffer.byteLength);
-*/
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.replace('data:', '').replace(/^.+,/, ''));
+    reader.onerror = error => reject(error);
+});
 
+async function uploadImage(base64){
+    const config = {method:"POST", body: JSON.stringify({base64: base64}), headers: {"Content-Type":"application/json"}};
+    const url = "http://localhost:8000/upload";
+    const response = await fetch(url, config);
+    return response.json();
+}
 
 //https://www.npmjs.com/package/ipfs-http-client
 
