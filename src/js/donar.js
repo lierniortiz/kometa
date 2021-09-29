@@ -73,7 +73,8 @@ async function escribirDatos() {
            </div>
            <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 border_right">
               <div class="upcoming">
-              <figure><img src=./images/banner2.jpg alt="#" /></figure>
+              
+              <figure><img src="https://gateway.pinata.cloud/ipfs/${proyecto.hs}" alt="#" /></figure>
             </div>
           </div>
         </div>
