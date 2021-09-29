@@ -52,7 +52,7 @@ async function init(){
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x4966654F7ebBee98890590406e5c36f5FbC47ac3"
+      "0x9E83Ff60cdCdCCA0Efe06388D21a610A641d653b"
     );
     return contractInstance;
 }
@@ -63,21 +63,21 @@ window.init = init;
 async function recogerDatos() {
     conexionWeb3();
     const contractInstance = await init();
-    //console.log(contractInstance);
 
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
     const contacto = document.getElementById("contacto").value;
     const donReq = document.getElementById("donReq").value;
     const descripcion = document.getElementById("descripcion").value;
-    //const img = document.getElementById("imagen");
-
-    //const hs = loadIPFS(img);
+    const img = document.getElementById("imagen");
+    
     const ac = await getCuenta();
+
+    //const hs = await loadIPFS(img);
 
     const donReqWei = web3.utils.toWei(donReq,"ether");
 
-    await contractInstance.methods.subirProyecto("brv", nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
+    await contractInstance.methods.subirProyecto("hgv", nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
     
     const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
     const numeroBloque = eventos[0].blockNumber;
@@ -97,17 +97,22 @@ async function digestMessage(message) {
 */
 
 
+//https://www.npmjs.com/package/ipfs-http-client
+
 //Función que sube una imagen dada a ipfs y nos retorna el hash
 async function loadIPFS(img) {
-  const node = await IPFS.create();
-  const result = node.add(img); 
+  const ipfsClient = window.IpfsHttpClient;
+  console.log(ipfsClient);
+  const ipfs = ipfsClient.create();
+  console.log(ipfs);
+  const result = await ipfs.add(img); //path of the file to be added
   return result.cid.toString();
 }
 
 //Funcion que nos retorna lo guardado en IPFS dado un hash
 async function downloadIPFS(hash) {
-  const node = await IPFS.create();
-  const stream = node.cat(hash);
+  const ipfs = await IPFS.create();
+  const stream = ipsf.cat(hash);
   let data = "";
   for await (const chunk of stream) {
     data += chunk.toString();
