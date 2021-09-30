@@ -52,7 +52,7 @@ async function init(){
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0x9E83Ff60cdCdCCA0Efe06388D21a610A641d653b"
+      "0xD604c07f58c4d6d6711Fc3842eEc30064FAf5e24"
     );
     return contractInstance;
 }
@@ -76,17 +76,18 @@ async function recogerDatos() {
     const base64 = await toBase64(img);
     const imgResponse = await uploadImage(base64);
     const hs = imgResponse.cid;
-    console.log(hs);
 
     const donReqWei = web3.utils.toWei(donReq,"ether");
 
-    await contractInstance.methods.subirProyecto(hs, nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
+    await contractInstance.methods.subirProyecto(hs, nombreProyecto, nombreOrganizacion, contacto,
+     descripcion, donReqWei).send({from: ac,});
 
     const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
     const numeroBloque = eventos[0].blockNumber;
     alert("Tu proyecto ha sido subido al bloque número " + numeroBloque);
 }
 
+//Convierte una imagen a base64
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -94,32 +95,12 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error);
 });
 
+//Sube una imagen a un servidor público el cual redirecciona la imagen a Pinata y a IPFS
 async function uploadImage(base64){
-    const config = {method:"POST", body: JSON.stringify({base64: base64}), headers: {"Content-Type":"application/json"}};
-    const url = "http://localhost:8000/upload";
+    const config = {method:"POST", body: JSON.stringify({base64: base64}), 
+    headers: {"Content-Type":"application/json"}};
+    const url = "http://app-a3ce6b6a-db3a-4579-9eb8-af58ba78ea82.cleverapps.io/upload";
     const response = await fetch(url, config);
     return response.json();
 }
 
-//https://www.npmjs.com/package/ipfs-http-client
-
-//Función que sube una imagen dada a ipfs y nos retorna el hash
-async function loadIPFS(img) {
-  const ipfsClient = window.IpfsHttpClient;
-  console.log(ipfsClient);
-  const ipfs = ipfsClient.create();
-  console.log(ipfs);
-  const result = await ipfs.add(img); //path of the file to be added
-  return result.cid.toString();
-}
-
-//Funcion que nos retorna lo guardado en IPFS dado un hash
-async function downloadIPFS(hash) {
-  const ipfs = await IPFS.create();
-  const stream = ipsf.cat(hash);
-  let data = "";
-  for await (const chunk of stream) {
-    data += chunk.toString();
-  }
-  return data;
-}
