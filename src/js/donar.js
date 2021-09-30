@@ -39,10 +39,12 @@ async function escribirDatos() {
                </p>
                <br>
                 <p>
-                 ${((proyecto.donRec * 100) / proyecto.donReq).toFixed(2)} % de la donación completada.
+                 ${((proyecto.donRec * 100) / proyecto.donReq).toFixed(2)} 
+                 % de la donación completada.
                 </p>
                 <p>
-                  Faltan ${(proyecto.donReq - proyecto.donRec) / 10 ** 18} ETH para completar el proyecto.
+                  Faltan ${(proyecto.donReq - proyecto.donRec) / 10 ** 18} 
+                  ETH para completar el proyecto.
                 </p>
                   <form class="donar_py" type="POST">
                   <div class="row">
@@ -73,8 +75,8 @@ async function escribirDatos() {
            </div>
            <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 border_right">
               <div class="upcoming">
-              
-              <figure><img src="https://gateway.pinata.cloud/ipfs/${proyecto.hs}" alt="#" /></figure>
+              <figure><img src="https://gateway.pinata.cloud/ipfs/${proyecto.hs}" 
+              alt="#" /></figure>
             </div>
           </div>
         </div>
