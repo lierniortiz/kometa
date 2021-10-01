@@ -113,7 +113,7 @@
           <div class="col-md-12">
             <form class="subir_py" type="POST">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" id="datos">
                   <div class="titlepage">
                     <h2>Datos</h2>
                   </div>
@@ -161,14 +161,11 @@
                     ></textarea>
                   </div>
                   <div>
-                    <input
+                    
+                    <input 
+                      type="file" 
                       class="imagearea"
-                      type="hidden"
-                      name="MAX_FILE_SIZE"
-                      value="4194304"
-                      id="imagen"
-                    />
-                    <input type="file" />
+                      id="imagen"/>
                   </div>
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <button
@@ -199,7 +196,7 @@
           <div class="copyright">
             <p>
               El código es libre y está disponible en
-              <a href="https://github.com/">gitHub</a>
+              <a href="https://github.com/lierniortiz/kometa">gitHub</a>
             </p>
           </div>
         </div>
@@ -215,6 +212,8 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/subir.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
 
     <!-- sidebar -->
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
