@@ -52,18 +52,21 @@ async function init(){
     let contractAbi = contract.abi;
     let contractInstance = new web3.eth.Contract(
       contractAbi,
-      "0xD604c07f58c4d6d6711Fc3842eEc30064FAf5e24"
+      "0x00423E47938e4ba9d78eD14aF00C5A0237E07DF5"
     );
     return contractInstance;
 }
 
 window.init = init;
 
+
+
 //Recoge datos del formulario de inscripcion de proyectos y los sube a la blockchain
 async function recogerDatos() {
     conexionWeb3();
     const contractInstance = await init();
 
+    //Recoger datos del formulario
     const nombreProyecto = document.getElementById("nombre").value;
     const nombreOrganizacion = document.getElementById("organización").value;
     const contacto = document.getElementById("contacto").value;
@@ -73,18 +76,32 @@ async function recogerDatos() {
     
     const ac = await getCuenta();
 
+    //Imagen a IPFS vía Pinata
     const base64 = await toBase64(img);
     const imgResponse = await uploadImage(base64);
     const hs = imgResponse.cid;
 
+    //Subir proyecto al mapping del contrato
     const donReqWei = web3.utils.toWei(donReq,"ether");
+    let tx = await contractInstance.methods.subirProyecto(hs, nombreProyecto, nombreOrganizacion, contacto, descripcion, donReqWei).send({from: ac,});
+    let txHash = tx.transactionHash;
+    let numBloque = tx.blockNumber;
 
-    await contractInstance.methods.subirProyecto(hs, nombreProyecto, nombreOrganizacion, contacto,
-     descripcion, donReqWei).send({from: ac,});
+    //Dar a conocer al usuario su transacción
+    let container = document.querySelector("#datos");
+    container.innerHTML = `<div class="titlepage">
+                            <h1>¡PROYECTO SUBIDO!</h1>
+                          </div>
+                          <div class="titlepageS">
+                            <h2><i>${nombreProyecto}</i>.</h2><br>
+                            <h3>Hash de tu transacción: </h3>
+                            <div class="hs"><p> ${txHash} </p></div><br><br><br><br>
+                            <p><a href="https://ropsten.etherscan.io/tx/${txHash}">Accede al explorador de tu transacción aquí</a></p>
+                          </div>`;
 
+    //Recoger evento emitido por el contrato
     const eventos = await contractInstance.getPastEvents("proyectoSubido",{});
-    const numeroBloque = eventos[0].blockNumber;
-    alert("Tu proyecto ha sido subido al bloque número " + numeroBloque);
+    const ultimoEvento = eventos[0];
 }
 
 //Convierte una imagen a base64
