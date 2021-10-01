@@ -101,13 +101,31 @@ async function donar(_id) {
   let proyecto = await contractInstance.methods.getProyecto(_id).call();
   let idHtml = "donacion" + proyecto.id;
   let cantidad = document.getElementById(idHtml).value;
-  await contractInstance.methods
+  let tx = await contractInstance.methods
     .donar(_id)
     .send({ from: donante, value: web3.utils.toWei(cantidad, "ether") });
-  
-  const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
-  const tx = eventos[0].transactionHash;
-  alert("Hash de tu transacción: " + tx);
 
+  let txHash = tx.transactionHash;
+  let numBloque = tx.blockNumber;
+
+  //Dar a conocer al usuario su transacción
+  let container = document.querySelector("#proyectos_container");
+  container.innerHTML = `<div class="fondo">
+                          <div class="titlepage">
+                            <h1>¡PROYECTO DONADO!</h1>
+                          </div>
+                          <div class="titlepageS">
+                            <h2><i>${proyecto.nm}</i>.</h2><br>
+                            <h3>Hash de tu transacción: </h3>
+                            <div class="hs"><p> ${txHash} </p></div><br><br><br><br>
+                            <p><a href="https://ropsten.etherscan.io/tx/${txHash}">Accede al explorador de tu transacción aquí</a></p>
+                          </div>
+                        </div>`;
+
+ 
+
+  const eventos = await contractInstance.getPastEvents("proyectoDonado",{});
+  const evento = eventos[0]
+  //alert("Hash de tu transacción: " + tx);
 
 }
