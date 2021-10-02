@@ -1,6 +1,6 @@
 # Kometa
 
-Esta configuración es para fines académicos, ya que todo correrá localmente realizándolo de la forma explicada a continuación:
+Esta configuración es para fines académicos, ya que todo correrá localmente si se realiza de la forma explicada a continuación:
 ## Instalar dependencias necesarias
 1. node.js
 2. Truffle
@@ -19,7 +19,7 @@ Abrir Ganache (con quickstart es suficiente) y desplegar el contrato:
 ```
 truffle migrate
 ```
-Si no se quiere utilizar Ganache, el contrato está desplegado en la dirección 0xb132e9a86a95293b1ea483096677e70c2991cf99 de la red Ropsten. Por lo que se puede establecer este dato en la línea 55 de app.js y utilizar dicha red para hacer pruebas. 
+Si no se quiere utilizar la red local Ganache, el contrato está desplegado en la dirección 0xb132e9a86a95293b1ea483096677e70c2991cf99 de la red Ropsten. Por lo que se puede establecer este dato en la línea 55 de app.js y utilizar dicha red para hacer pruebas. 
 
 ## Interactuar con la web
 ```
