@@ -1,6 +1,6 @@
 # Kometa
 
-Esta configuración es para fines académicos, ya que todo correrá localmente realizándolo de esta forma.
+Esta configuración es para fines académicos, ya que todo correrá localmente realizándolo de la forma explicada a continuación:
 ## Instalar dependencias necesarias
 1. node.js
 2. Truffle
