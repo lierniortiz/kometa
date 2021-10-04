@@ -5,7 +5,7 @@ Esta configuración es para fines académicos, ya que todo correrá localmente s
 1. node.js
 2. Truffle
 ```
-npm install g-truffle
+npm install -g truffle
 ```
 3. Ganache. https://www.trufflesuite.com/ganache
 4. Metamask. https://metamask.io/download.html
